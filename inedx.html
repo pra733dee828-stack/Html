@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>E-Commerce Product Saver</title>
+                        <style>
+                                    body {
+                                                    font-family: Arial, sans-serif;
+                                                                max-width: 800px;
+                                                                            margin: 0 auto;
+                                                                                        padding: 20px;
+                                                                                                    background-color: #f4f4f4;
+                                    }
+                                            h1 {
+                                                            text-align: center;
+                                                                        color: #333;
+                                            }
+                                                    form {
+                                                                    background: white;
+                                                                                padding: 20px;
+                                                                                            border-radius: 8px;
+                                                                                                        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                                                                                                                    margin-bottom: 20px;
+                                                    }
+                                                            label {
+                                                                            display: block;
+                                                                                        margin-bottom: 5px;
+                                                                                                    font-weight: bold;
+                                                            }
+                                                                    input, textarea {
+                                                                                    width: 100%;
+                                                                                                padding: 8px;
+                                                                                                            margin-bottom: 15px;
+                                                                                                                        border: 1px solid #ccc;
+                                                                                                                                    border-radius: 4px;
+                                                                    }
+                                                                            button {
+                                                                                            background-color: #28a745;
+                                                                                                        color: white;
+                                                                                                                    padding: 10px 15px;
+                                                                                                                                border: none;
+                                                                                                                                            border-radius: 4px;
+                                                                                                                                                        cursor: pointer;
+                                                                            }
+                                                                                    button:hover {
+                                                                                                    background-color: #218838;
+                                                                                    }
+                                                                                            #productList {
+                                                                                                            background: white;
+                                                                                                                        padding: 20px;
+                                                                                                                                    border-radius: 8px;
+                                                                                                                                                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                                                                                            }
+                                                                                                    .product {
+                                                                                                                    border-bottom: 1px solid #eee;
+                                                                                                                                padding: 10px 0;
+                                                                                                    }
+                                                                                                            .product h3 {
+                                                                                                                            margin: 0;
+                                                                                                            }
+                                                                                                                    .deleteBtn {
+                                                                                                                                    background-color: #dc3545;
+                                                                                                                                                color: white;
+                                                                                                                                                            border: none;
+                                                                                                                                                                        padding: 5px 10px;
+                                                                                                                                                                                    border-radius: 4px;
+                                                                                                                                                                                                cursor: pointer;
+                                                                                                                    }
+                                                                                                                            .deleteBtn:hover {
+                                                                                                                                            background-color: #c82333;
+                                                                                                                            }
+                                                                                                                        </style>
+                                                                                                                    </head>
+                                                                                                                    <body>
+                                                                                                                            <h1>E-Commerce Product Saver</h1>
+                                                                                                                                <form id="productForm">
+                                                                                                                                            <label for="link">E-Commerce Website Link:</label>
+                                                                                                                                                    <input type="url" id="link" placeholder="e.g., https://www.amazon.com/product" required>
+
+                                                                                                                                                            <label for="name">Product Name:</label>
+                                                                                                                                                                    <input type="text" id="name" placeholder="e.g., Wireless Headphones" required>
+
+                                                                                                                                                                            <label for="abilities">Product Abilities (Features/Description):</label>
+                                                                                                                                                                                    <textarea id="abilities" placeholder="e.g., Noise-cancelling, Bluetooth 5.0, 30-hour battery" required></textarea>
+
+                                                                                                                                                                                            <label for="trades">Product Trades (Price/Condition/etc.):</label>
+                                                                                                                                                                                                    <textarea id="trades" placeholder="e.g., Price: $50, Condition: New, Available in Black" required></textarea>
+
+                                                                                                                                                                                                            <label for="anything">Anything Else (Notes/Tags/Reviews):</label>
+                                                                                                                                                                                                                    <textarea id="anything" placeholder="e.g., Great for travel, 4.5-star rating"></textarea>
+
+                                                                                                                                                                                                                            <button type="submit">Save Product</button>
+                                                                                                                                </form>
+
+                                                                                                                                    <div id="productList">
+                                                                                                                                                <h2>Saved Products</h2>
+                                                                                                                                                        <div id="products"></div>
+                                                                                                                                    </div>
+
+                                                                                                                                        <script>
+                                                                                                                                                    const form = document.getElementById('productForm');
+                                                                                                                                                            const productsContainer = document.getElementById('products');
+                                                                                                                                                                    let products = JSON.parse(localStorage.getItem('products')) || [];
+
+                                                                                                                                                                            function renderProducts() {
+                                                                                                                                                                                            productsContainer.innerHTML = '';
+                                                                                                                                                                                                        products.forEach((product, index) => {
+                                                                                                                                                                                                                            const productDiv = document.createElement('div');
+                                                                                                                                                                                                                                            productDiv.className = 'product';
+                                                                                                                                                                                                                                                            productDiv.innerHTML = `
+                                                                                                                                                                                                                                                                                <h3>${product.name}</h3>
+                                                                                                                                                                                                                                                                                                    <p><strong>Link:</strong> <a href="${product.link}" target="_blank">${product.link}</a></p>
+                                                                                                                                                                                                                                                                                                                        <p><strong>Abilities:</strong> ${product.abilities}</p>
+                                                                                                                                                                                                                                                                                                                                            <p><strong>Trades:</strong> ${product.trades}</p>
+                                                                                                                                                                                                                                                                                                                                                                <p><strong>Anything Else:</strong> ${product.anything || 'None'}</p>
+                                                                                                                                                                                                                                                                                                                                                                                    <button class="deleteBtn" onclick="deleteProduct(${index})">Delete</button>
+                                                                                                                                                                                                                                                                                                                                                                                                    `;
+                                                                                                                                                                                                                                                                                                                                                                                                                    productsContainer.appendChild(productDiv);
+                                                                                                                                                                                                        });
+                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                            form.addEventListener('submit', (e) => {
+                                                                                                                                                                                                                            e.preventDefault();
+                                                                                                                                                                                                                                        const newProduct = {
+                                                                                                                                                                                                                                                            link: document.getElementById('link').value,
+                                                                                                                                                                                                                                                                            name: document.getElementById('name').value,
+                                                                                                                                                                                                                                                                                            abilities: document.getElementById('abilities').value,
+                                                                                                                                                                                                                                                                                                            trades: document.getElementById('trades').value,
+                                                                                                                                                                                                                                                                                                                            anything: document.getElementById('anything').value
+                                                                                                                                                                                                                                        };
+                                                                                                                                                                                                                                                    products.push(newProduct);
+                                                                                                                                                                                                                                                                localStorage.setItem('products', JSON.stringify(products));
+                                                                                                                                                                                                                                                                            renderProducts();
+                                                                                                                                                                                                                                                                                        form.reset();
+                                                                                                                                                                                                                                    });
+
+                                                                                                                                                                                                                                            function deleteProduct(index) {
+                                                                                                                                                                                                                                                            products.splice(index, 1);
+                                                                                                                                                                                                                                                                        localStorage.setItem('products', JSON.stringify(products));
+                                                                                                                                                                                                                                                                                    renderProducts();
+                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                    renderProducts();
+                                                                                                                                                                                                                                        </script>
+                                                                                                                                                                                                                                    </body>
+                                                                                                                                                                                                                                    </html>
+                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                            })
+                                                                                                                                                                                                        })
+                                                                                                                                                                            }
+                                                                                                                            }
+                                                                                                                    }
+                                                                                                            }
+                                                                                                    }
+                                                                                            }
+                                                                                    }
+                                                                            }
+                                                                    }
+                                                            }
+                                                    }
+                                            }
+                                    }
